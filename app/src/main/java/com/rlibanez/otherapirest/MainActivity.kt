@@ -27,6 +27,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.rlibanez.otherapirest.ui.screen.MainScreen
+import com.rlibanez.otherapirest.ui.screen.SearchScreen
 import com.rlibanez.otherapirest.ui.theme.OtherApiRestTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,44 +46,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun MainScreen(navController: NavHostController) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Button(onClick = { navController.navigate("search") }) {
-            Text(text = "BUSCAR")
-        }
-    }
-}
-
-@Composable
-fun SearchScreen(navController: NavHostController, viewModel: SectionViewModel = viewModel()) {
-    val sections = viewModel.sections.collectAsState().value
-    var searchText by remember { mutableStateOf("") }
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(10.dp)) {
-
-        TextField(
-            value = searchText,
-            onValueChange = { query ->
-                searchText = query
-                viewModel.fetchSections(query)
-            },
-            label = { Text("Buscar") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(sections) { section ->
-                //Text(text = section.name, modifier = Modifier.padding(8.dp))
-                SectionItem(section = section)
-            }
-        }
-    }
-}
