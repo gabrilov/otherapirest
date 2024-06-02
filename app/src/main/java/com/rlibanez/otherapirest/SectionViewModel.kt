@@ -11,9 +11,9 @@ class SectionViewModel : ViewModel() {
     private val _sections = MutableStateFlow<List<Section>>(emptyList())
     val sections: StateFlow<List<Section>> = _sections
 
-    fun fetchSections(start: String) {
+    fun fetchSections(contain: String) {
         viewModelScope.launch {
-            val response = RetrofitInstance.api.getSections(start)
+            val response = RetrofitInstance.api.getSections(contain)
             if (response.isSuccessful) {
                 response.body()?.let {
                     _sections.value = it

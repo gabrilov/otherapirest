@@ -7,6 +7,6 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("sections")
-    suspend fun getSections(@Query("start") start: String): Response<List<Section>>
+    suspend fun getSections(@Query("contain") contain: String): Response<List<Section>>
 
 }
