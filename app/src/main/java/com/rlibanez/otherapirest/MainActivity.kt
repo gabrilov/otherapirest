@@ -63,7 +63,7 @@ fun SearchScreen(navController: NavHostController, viewModel: SectionViewModel =
 
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(16.dp)) {
+        .padding(10.dp)) {
 
         TextField(
             value = searchText,
