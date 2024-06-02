@@ -1,11 +1,61 @@
-package com.rlibanez.otherapirest
+package com.rlibanez.otherapirest.ui.screen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.rlibanez.otherapirest.Section
+import com.rlibanez.otherapirest.SectionViewModel
+
+@Composable
+fun SearchScreen(navController: NavHostController, viewModel: SectionViewModel = viewModel()) {
+    val sections = viewModel.sections.collectAsState().value
+    var searchText by remember { mutableStateOf("") }
+
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)) {
+
+            TextField(
+                value = searchText,
+                onValueChange = { query ->
+                    searchText = query
+                    viewModel.fetchSections(query)
+                },
+                label = { Text("Buscar") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(sections) { section ->
+                    //Text(text = section.name, modifier = Modifier.padding(8.dp))
+                    SectionItem(section = section)
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun SectionItem(section: Section) {
@@ -52,4 +102,10 @@ fun SectionItem(section: Section) {
         Text(text = "al: ${section.al}")
         Text(text = "iy: ${section.iy}")
     }
+}
+
+@Composable
+@Preview(showSystemUi = true, showBackground = true)
+fun SearchScreenPreview() {
+    SearchScreen(navController = rememberNavController())
 }
